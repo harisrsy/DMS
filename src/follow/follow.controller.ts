@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { FilefollowDto } from './follow.dto';
 import { FollowService } from './follow.service';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 
 

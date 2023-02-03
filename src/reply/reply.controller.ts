@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ReplyService } from './reply.service';
 import { FilereplyDto } from './reply.dto';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 
 @Controller('reply')

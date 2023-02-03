@@ -13,13 +13,15 @@ import {
 } from '@nestjs/common';
 import { NcrService } from './ncr.service';
 import { FilencrDto } from './ncr.dto';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtStrategy } from 'src/auth/jwt.strategy';
 
 @Controller('ncr')
 
 export class NcrController {
   constructor(private ncrService: NcrService) {}
-  @UseGuards(JwtAuthGuard)
+
+  @UseGuards(JwtAuthGuard, JwtStrategy)
   @Get()
   getAllNcr() {
     return this.ncrService.all();

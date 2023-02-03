@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, IsEmail, Length } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, Length, IsIn } from 'class-validator';
+
 
 export class AuthDto {
   @IsNotEmpty()
@@ -10,4 +11,9 @@ export class AuthDto {
   @IsString()
   @Length(3, 20, { message: 'Passowrd has to be at between 3 and 20 chars' })
   public password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsIn(['admin','user'], { message: 'You have to choose your role' })
+  public role: string;
 }
