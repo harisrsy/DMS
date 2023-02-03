@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ncr {
+  id                          Int @id @default(autoincrement())
+  regbes                   String
+  subject                  String
+  audit_plan_no               String @unique()
+  ncr_no                      String @unique
+  issued_date                 String
+  responsibility_office       String
+  audit_type                  String
+  audit_scope               String
+  To_UIC                    String
+  attention                 String
+  require_condition           String
+  level_of_finding            Int
+  problem_analysis            Boolean @default(false)  
+  answer_due_date             String
+  issue_IAN                 Boolean @default(false)
+  IAN_nbr                   String
+  encountered_condition       String
+  audited_by                String
+  audit_date                String
+  acknowledge_by            String
+  acknowledge_date          String
+  status String
+  remark String
+  reply reply []
+  follow follow []
+}
+
+model reply {
+  id            Int @id @default(autoincrement())
+  RCA_problem           String
+  Corrective_Action     String
+  Preventive_Action     String
+  Identified_by_Auditee String
+  Identified_Date       String
+  Accept_by_Auditor     String
+  Auditor_Accept_date   String
+  ncrId Int ?
+  ncr ncr? @relation(fields: [ncrId], references: [id])
+}
+
+model follow{
+  id            Int @id @default(autoincrement())
+  ncrId Int?
+  Close_Corrective_Actions  String?
+  Proposed_Close_Auditee    String
+  Proposed_Close_Date       String
+  Implemented_close_date    String
+  Is_close                  Boolean? @default(false)
+  effectiveness             Boolean? @default(false)
+  Refer_to_Verify_Sheet     String?
+  Sheet_No                  String?
+  New_NCR_Issue_nbr         String?
+  Close_approved_by         String
+  Close_approved_date       String
+  Verified_Chief_IM         String
+  Verified_Date             String
+  ncr ncr? @relation(fields: [ncrId], references: [id])
+
+}
+
+model User {
+  id    String  @unique @default(uuid()) 
+  email String  @unique
+  hashedPassword String 
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+}
+
+
+
