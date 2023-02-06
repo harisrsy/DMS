@@ -13,15 +13,17 @@ import {
 import { ReplyService } from './reply.service';
 import { FilereplyDto } from './reply.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/role.enum';
 
-
+@Roles(Role.ADMIN, Role.USER)
+@UseGuards(JwtAuthGuard)
 @Controller('reply')
 export class ReplyController {
   constructor(
     private readonly replyService: ReplyService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   getAllReply() {
     return this.replyService.findAll();

@@ -13,7 +13,7 @@ datasource db {
 model ncr {
   id                          Int @id @default(autoincrement())
   regbes                   String
-  subject                  String
+  subject                   String
   audit_plan_no               String @unique()
   ncr_no                      String @unique
   issued_date                 String
@@ -33,14 +33,14 @@ model ncr {
   audit_date                String
   acknowledge_by            String
   acknowledge_date          String
-  status String
-  remark String
+  remark                    String
+  status                    String
   reply reply []
   follow follow []
 }
 
 model reply {
-  id            Int @id @default(autoincrement())
+  id                    Int @id @default(autoincrement())
   RCA_problem           String
   Corrective_Action     String
   Preventive_Action     String
@@ -73,8 +73,11 @@ model follow{
 }
 
 model User {
-  id    String  @unique @default(uuid()) 
+  id    String  @unique @default(uuid())
+  idNumber Int? @unique
+  name String? @unique
   email String  @unique
+  unit String?
   hashedPassword String 
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt()

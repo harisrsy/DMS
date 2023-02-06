@@ -9,13 +9,15 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { jwtSecret } from 'src/utils/constants';
 import { Request, Response } from 'express';
+import { inDto } from './dto/in.dto';
+import { ChangePasswordDto } from './dto/pass.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwt: JwtService) {}
 
   async signup(dto: AuthDto) {
-    const { email, password, role } = dto;
+    const { email, password, role, idNumber, name, unit } = dto;
 
     const userExists = await this.prisma.user.findUnique({
       where: { email },
@@ -33,14 +35,51 @@ export class AuthService {
         email,
         hashedPassword,
         role,
+        idNumber,
+        name,
+        unit,
       },
     });
 
     return { message: 'User created succefully' };
   }
 
-  async signin(dto: AuthDto, req: Request, res: Response) {
-    const { email, password, role } = dto;
+ 
+  async changePassword(dto: ChangePasswordDto) {
+    const { email, currentPassword, newPassword } = dto;
+  
+    const foundUser = await this.prisma.user.findUnique({
+      where: { email },
+    });
+  
+    if (!foundUser) {
+      throw new BadRequestException('User not found');
+    }
+  
+    const compareSuccess = await this.comparePasswords({
+      password: currentPassword,
+      hash: foundUser.hashedPassword,
+    });
+  
+    if (!compareSuccess) {
+      throw new BadRequestException('Wrong current password');
+    }
+  
+    const hashedPassword = await this.hashPassword(newPassword);
+  
+    await this.prisma.user.update({
+      where: { email },
+      data: {
+        hashedPassword,
+      },
+    });
+  
+    return { message: 'Password changed successfully' };
+  }
+  
+
+  async signin(dto: inDto, req: Request, res: Response) {
+    const { email, password, } = dto;
 
     const foundUser = await this.prisma.user.findUnique({
       where: {

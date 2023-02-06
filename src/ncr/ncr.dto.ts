@@ -64,6 +64,7 @@ export class FilencrDto {
   @IsIn(form)
   regbes: string;
 
+  @IsNotEmpty()
   subject: string;
 
   @IsNotEmpty()
@@ -136,6 +137,9 @@ export class FilencrDto {
   @IsDateString()
   acknowledge_date: string;
 
-  status: string;
+  @IsNotEmpty()
   remark: string;
+
+  @IsNotEmpty()
+  status: string;
 }

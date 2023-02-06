@@ -14,19 +14,22 @@ import {
 import { NcrService } from './ncr.service';
 import { FilencrDto } from './ncr.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { JwtStrategy } from 'src/auth/jwt.strategy';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/role.enum';
 
+
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('ncr')
-
 export class NcrController {
   constructor(private ncrService: NcrService) {}
 
-  @UseGuards(JwtAuthGuard, JwtStrategy)
+  @Roles(Role.ADMIN, Role.USER)
   @Get()
   getAllNcr() {
     return this.ncrService.all();
   }
-
+ @Roles(Role.ADMIN, Role.USER)
   @Get(':id')
   async getNcr(
     @Param('id', ParseIntPipe) id: number,
@@ -40,6 +43,7 @@ export class NcrController {
     return this.ncrService.get(+id);
   }
 
+  @Roles(Role.ADMIN)
   @Post()
   async addNcr(
     @Body()
@@ -48,6 +52,7 @@ export class NcrController {
     return await this.ncrService.create(body);
   }
 
+  @Roles(Role.ADMIN)
   @Delete(':id')
   async removeNcr(
     @Param('id', ParseIntPipe) id: number,
@@ -61,6 +66,7 @@ export class NcrController {
     return await this.ncrService.remove(+id);
   }
 
+  @Roles(Role.ADMIN)
   @Patch(':id')
   async updateNcr(
     @Param('id', ParseIntPipe) id: number,
