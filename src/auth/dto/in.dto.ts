@@ -1,11 +1,12 @@
-import { IsNotEmpty, IsString, IsEmail, Length,  } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, Length, IsNumber, IsIn,  } from 'class-validator';
+
+
 
 
 export class inDto {
   @IsNotEmpty()
-  @IsString()
-  @IsEmail()
-  public email: string;
+  @IsNumber()
+  public idNumber: number;
 
   @IsNotEmpty()
   @IsString()

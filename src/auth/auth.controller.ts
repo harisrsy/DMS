@@ -1,13 +1,19 @@
-import { Body, Controller, Get, Patch, Post, Request, Response } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Request, Response, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { Roles } from './decorators/roles.decorator';
 import { AuthDto } from './dto/auth.dto';
 import { inDto } from './dto/in.dto';
 import { ChangePasswordDto } from './dto/pass.dto';
+import { JwtAuthGuard } from './guards/jwt.guard';
+import { RolesGuard } from './guards/roles.guard';
+import { Role } from './models/role.enum';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  //@Roles(Role.ADMIN)
+  //@UseGuards(JwtAuthGuard, RolesGuard)
   @Post('signup')
   signup(@Body() dto: AuthDto) {
     return this.authService.signup(dto);

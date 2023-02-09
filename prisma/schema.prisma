@@ -84,5 +84,41 @@ model User {
   role String?
 }
 
+model ap {
+  id  Int @unique @default(autoincrement())
+  regbes                   String
+  docno String
+  docdate String
+  subject String
+  audit_type String 
+  detail detail[]
+  issuence issuence[]
+}
+
+model detail {
+  id Int @unique @default(autoincrement())
+  apId Int?
+  no Int?
+  requirement String?
+  description String?
+  sub_description String?
+  work_station String
+  planned_week String?
+  visit_date String?
+  audit_evidence String?
+  ap ap? @relation(fields: [apId], references: [id])
+
+}
+
+model issuence {
+id Int @unique @default(autoincrement())
+apId Int?
+issueNbr Int
+issueDate String
+issueDesc String
+issuedBy String
+hdoApprove String
+ap ap? @relation(fields: [apId], references: [id])
+}
 
 

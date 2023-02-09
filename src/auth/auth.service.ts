@@ -20,11 +20,11 @@ export class AuthService {
     const { email, password, role, idNumber, name, unit } = dto;
 
     const userExists = await this.prisma.user.findUnique({
-      where: { email },
+      where: { idNumber },
     });
 
     if (userExists) {
-      throw new BadRequestException('Email already exists');
+      throw new BadRequestException('User already exists');
     }
 
     const hashedPassword = await this.hashPassword(password);
@@ -46,10 +46,10 @@ export class AuthService {
 
  
   async changePassword(dto: ChangePasswordDto) {
-    const { email, currentPassword, newPassword } = dto;
+    const { idNumber, currentPassword, newPassword } = dto;
   
     const foundUser = await this.prisma.user.findUnique({
-      where: { email },
+      where: { idNumber },
     });
   
     if (!foundUser) {
@@ -68,7 +68,7 @@ export class AuthService {
     const hashedPassword = await this.hashPassword(newPassword);
   
     await this.prisma.user.update({
-      where: { email },
+      where: { idNumber },
       data: {
         hashedPassword,
       },
@@ -79,11 +79,11 @@ export class AuthService {
   
 
   async signin(dto: inDto, req: Request, res: Response) {
-    const { email, password, } = dto;
+    const { idNumber, password, } = dto;
 
     const foundUser = await this.prisma.user.findUnique({
       where: {
-        email,
+        idNumber,
       },
     });
 
@@ -102,7 +102,7 @@ export class AuthService {
 
     const token = await this.signToken({
       userId: foundUser.id,
-      email: foundUser.email,
+      idNumber: foundUser.idNumber,
       role: foundUser.role,
     });
 
@@ -131,10 +131,10 @@ export class AuthService {
     return await bcrypt.compare(args.password, args.hash);
   }
 
-  async signToken(args: { userId: string; email: string; role: string }) {
+  async signToken(args: { userId: string; idNumber: number; role: string }) {
     const payload = {
       id: args.userId,
-      email: args.email,
+      idNumber: args.idNumber,
       role: args.role
     };
 
